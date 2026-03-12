@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <title>Нэвтрэх</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial; background: #f0f2f5;
+           display: flex; justify-content: center; padding-top: 80px; }
+    .card { background: #fff; padding: 32px; border-radius: 8px;
+            width: 380px; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+    h2   { margin-bottom: 20px; color: #1877f2; }
+    input { width: 100%; padding: 12px; margin: 6px 0 14px;
+            border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    button { width: 100%; padding: 12px; background: #1877f2;
+             color: #fff; border: none; border-radius: 6px;
+             font-size: 16px; cursor: pointer; }
+    button:hover { background: #166fe5; }
+    .msg { margin-top: 12px; font-size: 13px; color: red; }
+    a   { color: #1877f2; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>🔐 Нэвтрэх</h2>
+  <input id="username" placeholder="Нэвтрэх нэр"/>
+  <input id="password" placeholder="Нууц үг" type="password"/>
+  <button onclick="login()">Нэвтрэх</button>
+  <p class="msg" id="msg"></p>
+  <p style="margin-top:16px; font-size:13px">
+    Бүртгэлгүй юу? <a href="register.html">Бүртгүүлэх</a>
+  </p>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const msg      = document.getElementById('msg');
+
+  const soap = `
+    <soapenv:Envelope
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:auth="http://auth.service/">
+      <soapenv:Body>
+        <auth:LoginUser>
+          <username>${username}</username>
+          <password>${password}</password>
+        </auth:LoginUser>
+      </soapenv:Body>
+    </soapenv:Envelope>`;
+
+  try {
+    const res  = await fetch('http://localhost:4000/soap', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/xml', 'SOAPAction': 'LoginUser' },
+      body: soap
+    });
+    const text = await res.text();
+    const xml  = new DOMParser().parseFromString(text, 'text/xml');
+    const ok     = xml.querySelector('success')?.textContent;
+    const token  = xml.querySelector('token')?.textContent;
+    const userId = xml.querySelector('userId')?.textContent;
+
+    if (ok === 'true') {
+      localStorage.setItem('token',  token);
+      localStorage.setItem('userId', userId);
+      window.location.href = 'profile.html';
+    } else {
+      msg.textContent = '❌ Нэвтрэх нэр эсвэл нууц үг буруу!';
+    }
+  } catch {
+    msg.textContent = '❌ Сервертэй холбогдож чадсангүй';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <title>Бүртгүүлэх</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial; background: #f0f2f5;
+           display: flex; justify-content: center; padding-top: 80px; }
+    .card { background: #fff; padding: 32px; border-radius: 8px;
+            width: 380px; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+    h2   { margin-bottom: 20px; color: #1877f2; }
+    input { width: 100%; padding: 12px; margin: 6px 0 14px;
+            border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    button { width: 100%; padding: 12px; background: #1877f2;
+             color: #fff; border: none; border-radius: 6px;
+             font-size: 16px; cursor: pointer; }
+    button:hover { background: #166fe5; }
+    .msg  { margin-top: 12px; font-size: 13px; }
+    .err  { color: red; }
+    .ok   { color: green; }
+    a    { color: #1877f2; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>📝 Бүртгүүлэх</h2>
+  <input id="username" placeholder="Нэвтрэх нэр"/>
+  <input id="email"    placeholder="Имэйл"/>
+  <input id="password" placeholder="Нууц үг" type="password"/>
+  <button onclick="register()">Бүртгүүлэх</button>
+  <p class="msg" id="msg"></p>
+  <p style="margin-top:16px; font-size:13px">
+    Бүртгэлтэй юу? <a href="login.html">Нэвтрэх</a>
+  </p>
+</div>
+
+<script>
+async function register() {
+  const username = document.getElementById('username').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const msg      = document.getElementById('msg');
+
+  if (!username || !email || !password) {
+    msg.className = 'msg err';
+    msg.textContent = 'Бүх талбарыг бөглөнө үү!';
+    return;
+  }
+
+  const soap = `
+    <soapenv:Envelope
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:auth="http://auth.service/">
+      <soapenv:Body>
+        <auth:RegisterUser>
+          <username>${username}</username>
+          <password>${password}</password>
+          <email>${email}</email>
+        </auth:RegisterUser>
+      </soapenv:Body>
+    </soapenv:Envelope>`;
+
+  try {
+    const res  = await fetch('http://localhost:4000/soap', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/xml', 'SOAPAction': 'RegisterUser' },
+      body: soap
+    });
+    const text = await res.text();
+    const xml  = new DOMParser().parseFromString(text, 'text/xml');
+    const ok   = xml.querySelector('success')?.textContent;
+    const msgt = xml.querySelector('message')?.textContent;
+
+    if (ok === 'true') {
+      msg.className = 'msg ok';
+      msg.textContent = '✅ ' + msgt;
+      setTimeout(() => window.location.href = 'login.html', 1500);
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = '❌ ' + msgt;
+    }
+  } catch {
+    msg.className = 'msg err';
+    msg.textContent = '❌ Сервертэй холбогдож чадсангүй';
+  }
+}
+</script>
+</body>
+</html>
