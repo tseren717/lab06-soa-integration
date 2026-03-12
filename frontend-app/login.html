@@ -67,10 +67,10 @@ async function login() {
       localStorage.setItem('userId', userId);
       window.location.href = 'profile.html';
     } else {
-      msg.textContent = '❌ Нэвтрэх нэр эсвэл нууц үг буруу!';
+      msg.textContent = 'Нэвтрэх нэр эсвэл нууц үг буруу!';
     }
   } catch {
-    msg.textContent = '❌ Сервертэй холбогдож чадсангүй';
+    msg.textContent = 'Сервертэй холбогдож чадсангүй';
   }
 }
 </script>

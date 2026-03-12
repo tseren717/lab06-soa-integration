@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="card">
-  <h2>📝 Бүртгүүлэх</h2>
+  <h2>Бүртгүүлэх</h2>
   <input id="username" placeholder="Нэвтрэх нэр"/>
   <input id="email"    placeholder="Имэйл"/>
   <input id="password" placeholder="Нууц үг" type="password"/>
@@ -74,15 +74,15 @@ async function register() {
 
     if (ok === 'true') {
       msg.className = 'msg ok';
-      msg.textContent = '✅ ' + msgt;
+      msg.textContent = ' ' + msgt;
       setTimeout(() => window.location.href = 'login.html', 1500);
     } else {
       msg.className = 'msg err';
-      msg.textContent = '❌ ' + msgt;
+      msg.textContent = '' + msgt;
     }
   } catch {
     msg.className = 'msg err';
-    msg.textContent = '❌ Сервертэй холбогдож чадсангүй';
+    msg.textContent = 'Сервертэй холбогдож чадсангүй';
   }
 }
 </script>

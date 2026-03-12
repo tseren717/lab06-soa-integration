@@ -30,7 +30,7 @@
 <body>
 <div class="container">
   <div class="card">
-    <h2>👤 Миний профайл</h2>
+    <h2>Миний профайл</h2>
 
     <label>Нэр</label>
     <input id="name"     placeholder="Таны нэр"/>
@@ -44,8 +44,8 @@
     <textarea id="bio"   placeholder="Өөрийгөө товч танилцуулна уу..."></textarea>
 
     <div class="btn-row">
-      <button class="save"   onclick="saveProfile()">💾 Хадгалах</button>
-      <button class="logout" onclick="logout()">🚪 Гарах</button>
+      <button class="save"   onclick="saveProfile()"> Хадгалах</button>
+      <button class="logout" onclick="logout()"> Гарах</button>
     </div>
     <p class="msg" id="msg"></p>
   </div>
@@ -55,17 +55,15 @@
   const token  = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
-  // Нэвтрээгүй бол login руу
   if (!token || !userId) window.location.href = 'login.html';
 
-  // Профайл ачаалах
   async function loadProfile() {
     try {
       const res  = await fetch(`http://localhost:3000/users/${userId}`, {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       if (res.status === 401) { logout(); return; }
-      if (!res.ok) return; // шинэ хэрэглэгч — хоосон
+      if (!res.ok) return; 
 
       const data = await res.json();
       document.getElementById('name').value     = data.name     || '';
@@ -76,7 +74,6 @@
     } catch { /* холбогдсонгүй */ }
   }
 
-  // Профайл хадгалах
   async function saveProfile() {
     const msg  = document.getElementById('msg');
     const body = {
@@ -88,7 +85,6 @@
     };
 
     try {
-      // Эхлээд POST (үүсгэх), амжилттай бол PUT (шинэчлэх)
       const res = await fetch(`http://localhost:3000/users/${userId}`, {
         method:  'PUT',
         headers: {
@@ -102,7 +98,6 @@
         msg.className   = 'msg ok';
         msg.textContent = '✅ Профайл хадгалагдлаа!';
       } else if (res.status === 404) {
-        // Профайл байхгүй тул POST хийх
         await fetch('http://localhost:3000/users', {
           method:  'POST',
           headers: {
@@ -112,14 +107,14 @@
           body: JSON.stringify(body)
         });
         msg.className   = 'msg ok';
-        msg.textContent = '✅ Профайл үүсгэгдлээ!';
+        msg.textContent = 'Профайл үүсгэгдлээ!';
       } else {
         msg.className   = 'msg err';
-        msg.textContent = '❌ Алдаа гарлаа';
+        msg.textContent = ' Алдаа гарлаа';
       }
     } catch {
       msg.className   = 'msg err';
-      msg.textContent = '❌ Сервертэй холбогдож чадсангүй';
+      msg.textContent = 'Сервертэй холбогдож чадсангүй';
     }
   }
 
