@@ -69,8 +69,9 @@ async function login() {
     } else {
       msg.textContent = 'Нэвтрэх нэр эсвэл нууц үг буруу!';
     }
-  } catch {
-    msg.textContent = 'Сервертэй холбогдож чадсангүй';
+  } catch (err) {
+    msg.textContent = 'Алдаа: ' + err.message;
+    console.error('Login алдаа:', err);
   }
 }
 </script>

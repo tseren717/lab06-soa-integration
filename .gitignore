@@ -1,2 +1,11 @@
 node_modules/
 *.db
+
+# Environment variables — нууц мэдээлэл агуулна
+.env
+file-manager-service/.env
+user-json-service/.env
+user-soap-service/.env
+
+# macOS
+.DS_Store

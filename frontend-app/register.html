@@ -80,9 +80,10 @@ async function register() {
       msg.className = 'msg err';
       msg.textContent = '' + msgt;
     }
-  } catch {
+  } catch (err) {
     msg.className = 'msg err';
-    msg.textContent = 'Сервертэй холбогдож чадсангүй';
+    msg.textContent = 'Алдаа: ' + err.message;
+    console.error('Register алдаа:', err);
   }
 }
 </script>

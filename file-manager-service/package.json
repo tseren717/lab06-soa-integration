@@ -1,0 +1,21 @@
+{
+  "name": "file-manager-service",
+  "version": "1.0.0",
+  "description": "File Manager Service - DigitalOcean Spaces (S3-compatible)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@aws-sdk/s3-request-presigner": "^3.540.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "soap": "^1.8.0"
+  }
+}

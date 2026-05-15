@@ -1,5 +1,6 @@
+require('dotenv').config();
 const soap = require('soap');
-const WSDL = 'http://localhost:4000/soap?wsdl';
+const WSDL = process.env.SOAP_WSDL_URL || 'http://localhost:4000/soap?wsdl';
 
 async function authMiddleware(req, res, next) {
   const header = req.headers['authorization'];
